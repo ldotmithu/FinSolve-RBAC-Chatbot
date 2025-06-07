@@ -11,4 +11,3 @@ pydantic
 streamlit
 requests
 unstructured
-openpyxl

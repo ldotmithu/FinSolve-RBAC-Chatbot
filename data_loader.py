@@ -15,7 +15,7 @@ departments = ["finance", "hr", "marketing", "engineering", "general"]
 
 # embedding = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 embedding = OpenAIEmbeddings(api_key= os.getenv("OPENAI_API_KEY"))
-splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+
 
 
 def load_and_store():
@@ -38,10 +38,11 @@ def load_and_store():
             docs = loader.load()
             for doc in docs:
                 doc.metadata["allowed_roles"] = [dept.capitalize()]
+            splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)    
             chunks = splitter.split_documents(docs)
             all_chunks.extend(chunks)
 
-        db = FAISS.from_documents(all_chunks, embedding)
+        db = FAISS.from_documents(documents=all_chunks, embedding=embedding)
         db.save_local(folder_path=os.path.join(FAISS_DIR, dept)) 
         print(f"Indexed {dept} with {len(all_chunks)} chunks.")
 if __name__=="__main__":

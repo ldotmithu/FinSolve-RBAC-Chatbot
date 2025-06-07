@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv() 
 
-FASTAPI_BACKEND_URL = os.getenv("FASTAPI_BACKEND_URL", "http://localhost:8000")
+BACKEND_URL = os.getenv("FASTAPI_BACKEND_URL", "http://localhost:8000")
 
 st.set_page_config(page_title="FinSolve RBAC Chatbot", layout="centered")
 
@@ -37,7 +37,7 @@ if not st.session_state.authenticated:
     if st.sidebar.button("Login"):
         headers = get_auth_headers(st.session_state.username, st.session_state.password)
         try:
-            response = requests.get(f"{FASTAPI_BACKEND_URL}/login", headers=headers)
+            response = requests.get(f"{BACKEND_URL}/login", headers=headers)
             if response.status_code == 200:
                 user_data = response.json()
                 st.session_state.authenticated = True
@@ -89,7 +89,7 @@ else:
         headers = get_auth_headers(st.session_state.username, st.session_state.password)
         try:
             res = requests.post(
-                f"{FASTAPI_BACKEND_URL}/chat", 
+                f"{BACKEND_URL}/chat", 
                 headers=headers,
                 json={"message": user_input, "role": st.session_state.selected_department}, 
             )
